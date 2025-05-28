@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>餐點介紹</title>
+  <style>
+    :root {
+  --bg-main: #f5f0e6;
+  --bg-secondary: #e8e2d0;
+  --bg-hover: #cfc7b8;
+  --bg-gray: #ddd8cc;
+  --border-color: #b7ae99;
+  --text-main: #4b4231;
+  --text-dark: #3a3421;
+  --status-text: #6b633f;
+  --highlight: #faf6ed;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background-color: var(--bg-main);  /* 原本是黑色，改成主背景色 */
+  color: var(--text-main);  /* 原本白色，改成主文字色 */
+}
+
+.navbar {
+  background-color: var(--bg-secondary);  /* 原本 #4a4a00，改成次背景色 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 15px;
+  position: relative;
+  color: var(--text-dark);
+}
+
+.menu-toggle {
+  position: absolute;
+  left: 15px;
+  background: none;
+  border: none;
+  color: var(--text-dark);
+  font-size: 25px;
+  cursor: pointer;
+}
+
+.dropdown {
+  display: none;
+  position: absolute;
+  background-color: var(--bg-secondary);
+  color: var(--text-main);
+  top: 50px;
+  left: 10px;
+  border-radius: 5px;
+  z-index: 1;
+  border: 1px solid var(--border-color);
+}
+
+.dropdown a {
+  display: block;
+  padding: 10px;
+  color: var(--text-main);
+  text-decoration: none;
+}
+
+.dropdown a:hover {
+  background-color: var(--bg-hover);
+}
+
+.navbar h1 {
+  margin: 0;
+  font-size: 30px;
+  text-align: center;
+  color: var(--text-dark);
+}
+
+.tab-feedback {
+  background-color: var(--bg-main);
+  text-align: center;
+  padding: 10px;
+  font-size: 25px;
+  font-weight: bold;
+  color: var(--status-text);
+}
+
+.divider {
+  border: none;
+  border-top: 2px solid var(--border-color);
+  margin: 10px 0;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    <h1>志學燒肉飯</h1>
+    <div class="dropdown" id="menuDropdown">
+      <a href="aboutus.html">關於我們</a>
+      <a href="introduce.html">餐點介紹</a>
+      <a href="#">最新消息</a>
+      <a href="feedback.html">意見回饋</a>
+    </div>
+  </div>
+  <hr class="divider">
+  <div class="tab-feedback">餐點介紹</div>
+
+  <div style="text-align: center; margin: 20px;">
+  <button onclick="location.href='mainmenu.html'" 
+          style="padding: 10px 20px; font-size: 16px; background-color: #ddd8cc; color: 4b4231; border: none; border-radius: 5px; cursor: pointer;">
+    ← 回主選單
+  </button>
+</div>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById("menuDropdown");
+      menu.style.display = (menu.style.display === "block") ? "none" : "block";
+    }
+  </script>
+</body>
+</html>

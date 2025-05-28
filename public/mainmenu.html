@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>志學燒肉飯</title>
+  <style>
+  * {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background-color: #f5f0e6; /* 淺米白 */
+  color: #4b4231; /* 深棕文字 */
+}
+.navbar {
+  background-color: #f5f0e6; /* 淺米白 */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 15px;
+  border-bottom: 1px solid #b7ae99; /* 淺棕分隔線 */
+}
+.menu-toggle {
+  background: none;
+  border: none;
+  color: #4b4231;
+  font-size: 25px;
+  cursor: pointer;
+}
+.dropdown {
+  display: none;
+  position: absolute;
+  background-color: #ddd8cc; /* 淡米灰 */
+  color: #4b4231;
+  top: 50px;
+  left: 10px;
+  border-radius: 5px;
+  z-index: 1;
+  box-shadow: 0 2px 6px rgba(75,66,49,0.2);
+}
+.dropdown a {
+  display: block;
+  padding: 10px;
+  color: #4b4231;
+  text-decoration: none;
+}
+.dropdown a:hover {
+  background-color: #cfc7b8; /* 稍深米色 */
+}
+.navbar h1 {
+  margin: 0;
+  font-size: 30px;
+  color: #4b4231;
+}
+.navbar .table-number {
+  background-color: #e8e2d0; /* 淺米黃 */
+  border-radius: 50%;
+  padding: 10px;
+  font-size: 14px;
+  text-align: center;
+  color: #4b4231;
+  border: 1px solid #b7ae99;
+}
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  background-color: #e8e2d0; /* 淺米黃 */
+  text-align: center;
+  border-top: 1px solid #b7ae99;
+  border-bottom: 1px solid #b7ae99;
+}
+.tab {
+  flex: 1 1 25%;
+  padding: 10px;
+  border-right: 1px solid #b7ae99;
+  cursor: pointer;
+  color: #4b4231;
+  font-weight: normal;
+}
+.tab:last-child {
+  border-right: none;
+}
+.tab.active {
+  background-color: #cfc7b8; /* 稍深米色 */
+  font-weight: bold;
+}
+.menu {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  max-width: calc(150px * 6 + 10px * 5 + 30px);
+  gap: 10px;
+  padding: 15px;
+  margin: 0 auto;
+}
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 230px;
+  padding: 10px;
+  background-color: #faf6ed; /* 非常淺的米白 */
+  border-radius: 5px;
+  text-align: center;
+  overflow: hidden;
+  border: 1px solid #b7ae99;
+  position: relative;
+  color: #4b4231;
+}
+.item .img {
+  height: 60px;
+  width: 100%;
+  background-color: #e8e2d0;
+  margin-bottom: 5px;
+  border-radius: 5px;
+}
+.item .name {
+  font-size: 14px;
+  margin: 4px 0;
+  height: 36px;
+  overflow: hidden;
+}
+.item .price {
+  font-size: 14px;
+  margin-top: auto;
+  margin-bottom: 100px;
+  color: #4b4231;
+}
+.counter {
+  position: absolute;
+  bottom: 35px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+.counter button {
+  background-color: #ddd8cc;
+  color: #4b4231;
+  border: none;
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+  border-radius: 3px;
+  font-weight: bold;
+}
+.status {
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  color: #6b633f; /* 柔和深棕 */
+}
+.cart-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  background-color: #cfc7b8; /* 稍深米色 */
+  color: #4b4231;
+  font-weight: bold;
+  font-size: 16px;
+  margin: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: 1px solid #b7ae99;
+  text-decoration: none;
+}
+.cart-button:hover {
+  background-color: #b7ae99;
+  color: #3a3421;
+}
+
+@media (max-width: 600px) {
+  .tab {
+    flex: 1 1 50%;
+  }
+  .navbar h1 {
+    font-size: 16px;
+  }
+}
+  </style>
+
+
+</head>
+<body>
+  <div class="navbar">
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    <h1>志學燒肉飯</h1>
+    <div class="table-number">
+      桌號<br>1
+    </div>
+    <div class="dropdown" id="menuDropdown">
+      <a href="aboutus.html">關於我們</a>
+      <a href="introduce.html">餐點介紹</a>
+      <a href="#">最新消息</a>
+      <a href="feedback.html">意見回饋</a>
+    </div>
+  </div>
+  <div class="tabs">
+    <div class="tab" data-category="Bento" onclick="filterMenu('Bento')">主餐類</div>
+    <div class="tab" data-category="Noodles" onclick="filterMenu('Noodles')">炒麵類</div>
+    <div class="tab" data-category="Side_Dishes" onclick="filterMenu('Side_Dishes')">小菜類</div>
+    <div class="tab" data-category="Steam_Dishes" onclick="filterMenu('Steam_Dishes')">蒸的比較慢</div>
+  </div>
+  <div class="menu"></div>
+  <div ><a href="order.html" class="cart-button">查看購物車　$<span id="cart-total">0</span></a></div>
+
+  <script>
+  function toggleMenu() {
+    const dropdown = document.getElementById('menuDropdown');
+    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+  }
+
+  let currentCategory = 'Bento'; // 預設分類
+  let totalPrice = 0; // 總價
+
+  function updateCartTotal() {
+    document.getElementById('cart-total').textContent = totalPrice;
+  }
+
+  function saveCartItem(name, price, quantity) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const index = cart.findIndex(item => item.name === name);
+    if (index >= 0) {
+      if (quantity === 0) {
+        cart.splice(index, 1); // 數量為0就刪除
+      } else {
+        cart[index].quantity = quantity;
+      }
+    } else {
+      if (quantity > 0) {
+        cart.push({name, price, quantity});
+      }
+    }
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }
+
+  async function loadMenu() {
+    try {
+      const response = await fetch('http://localhost:5500/api/menu');
+      if (!response.ok) throw new Error('網路錯誤，無法取得菜單');
+      const data = await response.json();
+
+      const menuContainer = document.querySelector('.menu');
+      menuContainer.innerHTML = '';
+
+      // 初始化 totalPrice 從 localStorage 撈
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+      data.forEach(item => {
+        const itemDiv = document.createElement('div');
+        itemDiv.classList.add('item');
+        itemDiv.setAttribute('data-type', item.Category);
+
+        const imgDiv = document.createElement('div');
+        imgDiv.classList.add('img');
+
+        const nameDiv = document.createElement('div');
+        nameDiv.classList.add('name');
+        nameDiv.textContent = item.Item_Name;
+
+        const priceDiv = document.createElement('div');
+        priceDiv.classList.add('price');
+        priceDiv.textContent = `$${item.Price}`;
+
+        const bottomRow = document.createElement('div');
+        bottomRow.classList.add('bottom-row');
+
+        const statusDiv = document.createElement('div');
+        statusDiv.classList.add('status');
+        statusDiv.textContent = item.Status === '供應中' ? '供應中' : '停售中';
+        statusDiv.style.color = item.Status === '供應中' ? 'darkgreen' : 'lightcoral';
+
+        const counterDiv = document.createElement('div');
+        counterDiv.classList.add('counter');
+
+        const minusBtn = document.createElement('button');
+        minusBtn.textContent = '-';
+
+        const countSpan = document.createElement('span');
+        // 從購物車中找該商品的數量
+        let cartItem = cart.find(c => c.name === item.Item_Name);
+        countSpan.textContent = cartItem ? cartItem.quantity : 0;
+
+        const plusBtn = document.createElement('button');
+        plusBtn.textContent = '+';
+
+        plusBtn.addEventListener('click', () => {
+          let count = parseInt(countSpan.textContent);
+          count++;
+          countSpan.textContent = count;
+
+          totalPrice += item.Price;
+          updateCartTotal();
+
+          saveCartItem(item.Item_Name, item.Price, count);
+        });
+
+        minusBtn.addEventListener('click', () => {
+          let count = parseInt(countSpan.textContent);
+          if (count > 0) {
+            count--;
+            countSpan.textContent = count;
+
+            totalPrice -= item.Price;
+            updateCartTotal();
+
+            saveCartItem(item.Item_Name, item.Price, count);
+          }
+        });
+
+        counterDiv.appendChild(minusBtn);
+        counterDiv.appendChild(countSpan);
+        counterDiv.appendChild(plusBtn);
+
+        bottomRow.appendChild(counterDiv);
+        bottomRow.appendChild(statusDiv);
+
+        itemDiv.appendChild(imgDiv);
+        itemDiv.appendChild(nameDiv);
+        itemDiv.appendChild(priceDiv);
+        itemDiv.appendChild(bottomRow);
+
+        menuContainer.appendChild(itemDiv);
+      });
+
+      filterMenu(currentCategory);
+      setActiveTab(currentCategory);
+      updateCartTotal(); // 初始呼叫
+    } catch (error) {
+      console.error('取得菜單時發生錯誤:', error);
+    }
+  }
+
+  function filterMenu(category) {
+    currentCategory = category;
+    const items = document.querySelectorAll('.item');
+    items.forEach(item => {
+      item.style.display = item.getAttribute('data-type') === category ? 'block' : 'none';
+    });
+    setActiveTab(category);
+  }
+
+  function setActiveTab(category) {
+    const tabs = document.querySelectorAll('.tab');
+    tabs.forEach(tab => {
+      tab.classList.toggle('active', tab.getAttribute('data-category') === category);
+    });
+  }
+
+  window.onload = () => {
+    loadMenu();
+  };
+</script>
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>訂購人資訊</title>
+<style>
+  :root {
+  --bg-main: #f5f0e6;
+  --bg-secondary: #e8e2d0;
+  --bg-hover: #cfc7b8;
+  --bg-gray: #ddd8cc;
+  --border-color: #b7ae99;
+  --text-main: #4b4231;
+  --text-dark: #3a3421;
+  --status-text: #6b633f;
+  --highlight: #faf6ed;
+}
+
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background-color: var(--bg-main);
+  color: #4b4231;
+}
+.navbar {
+  background-color: #f5f0e6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 15px;
+}
+
+.back-button {
+  padding: 10px 20px;
+  background-color: var(--bg-hover);
+  color: var(--text-main);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.back-button:hover {
+  background-color: var(--border-color);
+}
+.menu-toggle {
+  background: none;
+  border: none;
+  color: #4b4231;
+  font-size: 25px;
+  cursor: pointer;
+}
+.dropdown {
+  display: none;
+  position: absolute;
+  background-color: var(--bg-hover);
+  color: var(--text-dark);
+  top: 50px;
+  left: 10px;
+  border-radius: 5px;
+  z-index: 1;
+}
+.dropdown a {
+  display: block;
+  padding: 10px;
+  color: var(--text-dark);
+  text-decoration: none;
+}
+.dropdown a:hover {
+  background-color: var(--bg-gray);
+}
+.navbar h1 {
+  margin: 0;
+  text-align: center;
+  font-size: 30px;
+  color: #4b4231;
+}
+.table-number {
+  background-color: var(--bg-hover);
+  border-radius: 5px;
+  padding: 8px 15px;
+  font-size: 14px;
+  text-align: center;
+  user-select: none;
+}
+.form-container {
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 20px;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  background-color: var(--bg-secondary);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+input[type="text"], input[type="tel"], input[type="datetime-local"] {
+  width: 100%;
+  padding: 10px;
+  background-color: var(--highlight);
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  color: var(--text-dark);
+  font-size: 16px;
+}
+input::placeholder {
+  color: var(--text-main);
+}
+.note-small {
+  font-size: 12px;
+  color: var(--text-main);
+  margin-top: -12px;
+  margin-bottom: 10px;
+}
+.next-button {
+  display: block;
+  margin: 20px auto 40px auto;
+  width: 90%;
+  max-width: 400px;
+  padding: 12px;
+  background: #cfc7b8;
+  color: #4b4231;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  user-select: none;
+  text-align: center;
+}
+.back-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center; /* 垂直置中（通常不需要，但加上沒壞） */
+  width: 100%;
+  margin-top: 20px;
+}
+
+@media (max-width: 480px) {
+  .form-container {
+    margin: 20px 10px;
+  }
+  .navbar h1 {
+    font-size: 18px;
+  }
+}
+</style>
+</head>
+<body>
+  <div class="navbar">
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    <h1>志學燒肉飯</h1>
+    <div class="table-number">外帶</div>
+    <div class="dropdown" id="menuDropdown">
+      <a href="#">關於我們</a>
+      <a href="#">餐點介紹</a>
+      <a href="#">最新消息</a>
+      <a href="#">意見回饋</a>
+    </div>
+  </div>
+
+  <div class="back-button-container">
+  <button class="back-button" onclick="goBack()">← 返回上一頁</button>
+</div>
+
+  <div class="form-container">
+    <label for="name">訂購人姓名：</label>
+    <input type="text" id="name" name="name" placeholder="請輸入訂購人姓名" />
+
+    <label for="phone">電話：</label>
+    <input type="tel" id="phone" name="phone" placeholder="請輸入電話" />
+
+    <label for="pickup-time">預計取餐時間：</label>
+    <input type="datetime-local" id="pickup-time" name="pickup-time" />
+  </div>
+
+  <button class="next-button" onclick="submitTakeawayOrder()">確認送出訂單</button>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById("menuDropdown");
+      menu.style.display = menu.style.display === "block" ? "none" : "block";
+    }
+
+    function goBack() {
+  window.location.href = "order_takeout.html";
+}
+
+
+    // 預設預計取餐時間為現在時間+15分鐘
+    window.addEventListener('DOMContentLoaded', () => {
+  const pickupInput = document.getElementById('pickup-time');
+  const now = new Date();
+
+  // 加上台灣的 UTC+8 時差
+  now.setMinutes(now.getMinutes() + 15 + now.getTimezoneOffset()); // 補上系統與 UTC 的差異
+  now.setHours(now.getHours() + 8); // 再加上台灣時區
+
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+
+  const taiwanTimeString = `${year}-${month}-${day}T${hours}:${minutes}`;
+  pickupInput.value = taiwanTimeString;
+});
+
+  async function submitTakeawayOrder() {
+  // 1. 拿購物車
+  const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  if (!cart.length) return alert('購物車為空');
+  // 2. 讀姓名、電話、取餐時間
+  const name  = document.getElementById('name').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  let pickup = document.getElementById('pickup-time').value;
+  if (!name || !phone || !pickup) return alert('請填姓名、電話、取餐時間');
+  // 3. 整理 items & total
+  const items = cart.map(i=>({name:i.name,price:i.price,quantity:i.quantity}));
+  const total = items.reduce((s,i)=>s+i.price*i.quantity,0);
+  // 4. 拿序號、產生 OrderID
+  const now    = new Date();
+  const YYYY   = now.getFullYear();
+  const MM     = String(now.getMonth()+1).padStart(2,'0');
+  const DD     = String(now.getDate()).padStart(2,'0');
+  const maxSeq = (await (await fetch('http://localhost:5500/api/takeaway-orders/max-sequence')).json()).maxSequence || 0;
+  const next   = String(maxSeq+1).padStart(3,'0');
+  const orderID= `20${YYYY}${MM}${DD}${next}`;
+  // 5. 組 payload 丟給後端
+  const payload = {
+    OrderID:       orderID,
+    OrderSequence: parseInt(next),
+    CustomerName:  name,
+    PhoneNumber:   phone,
+    Items:         items,
+    Notes:         '',
+    TotalAmount:   total,
+    CreatedAt:     now.toISOString(),
+    Status:        '已接單',
+    PickupTime:    new Date(new Date(pickup).getTime()).toISOString()
+  };
+  const res = await fetch('http://localhost:5500/api/takeaway-orders', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+});
+  if (!res.ok) throw new Error(res.status);
+  alert('✅ 外帶訂單送出成功');
+  localStorage.removeItem('cart');
+  window.location.href = 'mainmenu_takeout.html';
+}
+
+
+  </script>
+</body>
+</html>
