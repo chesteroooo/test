@@ -226,7 +226,7 @@ input::placeholder {
   const YYYY   = now.getFullYear();
   const MM     = String(now.getMonth()+1).padStart(2,'0');
   const DD     = String(now.getDate()).padStart(2,'0');
-  const maxSeq = (await (await fetch('http://localhost:5500/api/takeaway-orders/max-sequence')).json()).maxSequence || 0;
+  const maxSeq = (await (await fetch('${base}/api/takeaway-orders/max-sequence')).json()).maxSequence || 0;
   const next   = String(maxSeq+1).padStart(3,'0');
   const orderID= `20${YYYY}${MM}${DD}${next}`;
   // 5. 組 payload 丟給後端
@@ -242,7 +242,7 @@ input::placeholder {
     Status:        '已接單',
     PickupTime:    new Date(new Date(pickup).getTime()).toISOString()
   };
-  const res = await fetch('http://localhost:5500/api/takeaway-orders', {
+  const res = await fetch('${base}/api/takeaway-orders', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
