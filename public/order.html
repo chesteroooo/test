@@ -327,7 +327,7 @@
     const day = String(now.getDate()).padStart(2, '0');
 
     // 查詢當日最大 OrderSequence
-    const response = await fetch('${base}/api/dinein-orders/max-sequence', {
+    const response = await fetch('/api/dinein-orders/max-sequence', {
       method: 'GET'
     });
     let orderSequence = '001';
@@ -355,7 +355,7 @@
     };
 
     try {
-      const res = await fetch('${base}/api/dinein-orders', {
+      const res = await fetch('/api/dinein-orders', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

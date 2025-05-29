@@ -489,7 +489,7 @@
         // 登出處理
         async function handleLogout() {
             try {
-                const response = await fetch('${base}/logout', {
+                const response = await fetch('/logout', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' }
                 });
@@ -513,7 +513,7 @@
             for (let i = 0; i < 3; i++) {
                 try {
                     document.getElementById('loadingMessage').style.display = 'block';
-                    const response = await fetch('${base}/menu', {
+                    const response = await fetch('/menu', {
                         headers: {
                             'Authorization': `Bearer ${sessionStorage.getItem('isLoggedIn')}`
                         }
@@ -571,7 +571,7 @@
         // 更新品項狀態並發送到後端，保持當前類別
         async function updateStatus(itemId, status) {
             try {
-                const response = await fetch('${base}/menu/update', {
+                const response = await fetch('/menu/update', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -665,7 +665,7 @@
             try {
                 let response;
                 if (itemID) {
-                    response = await fetch('${base}/menu/update-item', {
+                    response = await fetch('/menu/update-item', {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
@@ -674,7 +674,7 @@
                         body: JSON.stringify({ ItemID: parseInt(itemID), ...data })
                     });
                 } else {
-                    response = await fetch('${base}/menu/add', {
+                    response = await fetch('/menu/add', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -708,7 +708,7 @@
             const itemID = document.getElementById('itemID').value;
             if (!confirm('確定要刪除此品項？')) return;
             try {
-                const response = await fetch(`${base}/menu/delete/${itemID}`, {
+                const response = await fetch(`/menu/delete/${itemID}`, {
                     method: 'DELETE',
                     headers: {
                         'Authorization': `Bearer ${sessionStorage.getItem('isLoggedIn')}`

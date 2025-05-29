@@ -603,7 +603,7 @@
         // 登出處理
         async function handleLogout() {
             try {
-                const response = await fetch('${base}/logout', {
+                const response = await fetch('/logout', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' }
                 });
@@ -628,7 +628,7 @@
             for (let i = 0; i < 3; i++) {
                 try {
                     document.getElementById('loadingMessage').style.display = 'block';
-                    const response = await fetch('${base}/api/dinein-orders', {
+                    const response = await fetch('/api/dinein-orders', {
                         headers: {
                             'Authorization': `Bearer ${sessionStorage.getItem('isLoggedIn')}`
                         }
@@ -902,7 +902,7 @@
         // 完成訂單
         async function completeOrder(orderId, orderSequence) {
             try {
-                const response = await fetch('${base}/api/dinein-orders/complete', {
+                const response = await fetch('/api/dinein-orders/complete', {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -939,7 +939,7 @@
             try {
                 const promises = Array.from(selectedOrderIds).map(id => {
                     const [orderId, orderSequence] = id.split('-');
-                    return fetch('${base}/api/dinein-orders/complete', {
+                    return fetch('/api/dinein-orders/complete', {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
@@ -967,7 +967,7 @@
         async function deleteOrder(orderId, orderSequence) {
             if (!confirm(currentTab === 'pending' ? '確定取消此訂單？' : '確定刪除此訂單？')) return;
             try {
-                const response = await fetch(`${base}/api/dinein-orders/${orderId}/${orderSequence}`, {
+                const response = await fetch(`/api/dinein-orders/${orderId}/${orderSequence}`, {
                     method: 'DELETE',
                     headers: {
                         'Authorization': `Bearer ${sessionStorage.getItem('isLoggedIn')}`
@@ -1002,7 +1002,7 @@
             try {
                 const promises = Array.from(selectedOrderIds).map(id => {
                     const [orderId, orderSequence] = id.split('-');
-                    return fetch(`${base}/api/dinein-orders/${orderId}/${orderSequence}`, {
+                    return fetch(`/api/dinein-orders/${orderId}/${orderSequence}`, {
                         method: 'DELETE',
                         headers: {
                             'Authorization': `Bearer ${sessionStorage.getItem('isLoggedIn')}`
