@@ -4,8 +4,7 @@ node_modules/
 # 日志
 logs/
 
-# 本地 SQLite (如果不打算放到 repo)
-data/*.db
+
 
 # VSCode
 .vscode/
