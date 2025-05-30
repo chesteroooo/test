@@ -334,7 +334,9 @@
 
     // 查詢當日最大 OrderSequence
     // 查當日最大序號
-const response = await fetch('/api/dinein-orders/max-sequence');
+const response = await fetch(
+   `/api/dinein-orders/max-sequence?table=${encodeURIComponent(table)}`
+ );
 let orderSequence = '001';
 if (response.ok) {
   const data = await response.json();
