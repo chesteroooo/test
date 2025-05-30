@@ -653,27 +653,30 @@ app.delete('/menu/delete/:id', authenticate, (req, res) => {
     });
 });
 
-// 查詢當日最大 OrderSequence API
 app.get('/api/dinein-orders/max-sequence', (req, res) => {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const day = String(now.getDate()).padStart(2, '0');
-    const datePrefix = `10${year}${month}${day}`;
+  // 用本機 (或伺服器) 時區的「今天」來做 prefix
+  const now   = new Date();
+  const year  = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day   = String(now.getDate()).padStart(2, '0');
+  // 前綴要跟前端一樣：10YYYYMMDD
+  const datePrefix = `10${year}${month}${day}`;
 
-    db.get(
-        `SELECT MAX(OrderSequence) as maxSequence FROM DineIn_Orders WHERE OrderID LIKE ?`,
-        [`${datePrefix}%`],
-        (err, row) => {
-            if (err) {
-                logger.error(`查詢最大 OrderSequence 失敗: ${err.message}`);
-                res.status(500).json({ error: err.message });
-                return;
-            }
-            const maxSequence = row.maxSequence || 0;
-            res.json({ maxSequence });
-        }
-    );
+  db.get(
+    `SELECT MAX(OrderSequence) AS maxSequence
+       FROM DineIn_Orders
+      WHERE OrderID LIKE ?`,
+    [`${datePrefix}%`],
+    (err, row) => {
+      if (err) {
+        logger.error(`查詢最大 OrderSequence 失敗: ${err.message}`);
+        return res.status(500).json({ error: err.message });
+      }
+      // 當天沒有任何訂單就回 0
+      const maxSequence = row.maxSequence || 0;
+      res.json({ maxSequence });
+    }
+  );
 });
 
 // 提交內用訂單 API（公開路由，給消費者使用）

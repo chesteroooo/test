@@ -334,27 +334,20 @@
 
     // 查詢當日最大 OrderSequence
     // 查當日最大序號
-const response = await fetch(
-   `/api/dinein-orders/max-sequence?table=${encodeURIComponent(table)}`
- );
-let orderSequence = '001';
-if (response.ok) {
-  const data = await response.json();
+ const response = await fetch('/api/dinein-orders/max-sequence');
+  let orderSequence = '001';
+  if (response.ok) {
+    const data = await response.json();
+    // DEBUG：確認拿到的欄位
+    console.log('max-sequence 原始 →', data);
+    console.log('max-sequence JSON →', JSON.stringify(data));
 
-  // ▶ 正確印出物件
-  console.log('max-sequence 回傳 →', data);
-  console.log('max-sequence JSON →', JSON.stringify(data));
-
-  // ▶ 同時支援多種命名
-  const raw = data.maxSequence
-            ?? data.max_sequence
-            ?? data.MaxSequence
-            ?? 0;
-  orderSequence = String(parseInt(raw, 10) + 1).padStart(3, '0');
-} else {
-  console.warn('無法取得 max-sequence，使用預設 001');
-}
-
+    // 2. 取 data.maxSequence (若沒有則 0) 再 +1
+    const raw = data.maxSequence ?? 0;
+    orderSequence = String(parseInt(raw, 10) + 1).padStart(3, '0');
+  } else {
+    console.warn('取得 max-sequence 失敗，預設用 001');
+  }
 
 
     // 生成 OrderID (10YYYYMMDDSSS)
