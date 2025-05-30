@@ -325,7 +325,6 @@
     const notes = document.getElementById('note').value.trim();
     const totalAmount = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const tableText = document.querySelector('.table-number').textContent;
-    const tableNumber = tableText.replace('桌號', '').trim();
 
     // 獲取當前日期 (本地時間 CST)
     const now = new Date();
@@ -334,15 +333,17 @@
     const day = String(now.getDate()).padStart(2, '0');
 
     // 查詢當日最大 OrderSequence
-    const response = await fetch('/api/dinein-orders/max-sequence', {
-      method: 'GET'
-    });
+    const response = await fetch('/api/dinein-orders/max-sequence');
     let orderSequence = '001';
     if (response.ok) {
       const data = await response.json();
-      const maxSequence = data.maxSequence || 0;
-      orderSequence = String(parseInt(maxSequence) + 1).padStart(3, '0');
-    }
+      console.log('max-sequence 回傳 →', data);      // ← 新增：印出來看 key 長啥樣
+      // 同時嘗試兩種可能的欄位名稱，保證不會拿到 undefined
+      const raw = data.maxSequence ?? data.max_sequence ?? 0;
+      orderSequence = String(parseInt(raw, 10) + 1).padStart(3, '0');
+    } else {
+      console.warn('無法取得 max-sequence，使用預設 001');
+}
 
     // 生成 OrderID (10YYYYMMDDSSS)
     const orderId = `10${year}${month}${day}${orderSequence}`;
