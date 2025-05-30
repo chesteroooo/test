@@ -424,8 +424,18 @@ width: 80%;               /* 占视口宽度的 80% */
     <div class="tab" data-category="Steam_Dishes" onclick="filterMenu('Steam_Dishes')">蒸的比較慢</div>
   </div>
   <div class="menu"></div>
-  <div><a href="order.html" class="cart-button">查看訂單內容　$<span id="cart-total">0</span></a></div>
+  <a href="#" id="view-cart" class="cart-button">
+      查看訂單內容　$<span id="cart-total">0</span>
+  </a>
   <script>
+  const qs = window.location.search;     // 例如 "?table=B03"
+  const btn = document.getElementById('view-cart');
+  const params      = new URLSearchParams(window.location.search);
+  const table  = params.get('table');
+  document.getElementById('table-number-display').innerText = table;
+  // 动态把 href 设成 order.html?table=B03
+  btn.href = `order.html${qs}`;
+
   function toggleMenu() {
     const dropdown = document.getElementById('menuDropdown');
     dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
