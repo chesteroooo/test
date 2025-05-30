@@ -353,7 +353,8 @@
     // 生成 OrderID (10YYYYMMDDSSS)
     const orderId = `10${year}${month}${day}${orderSequence}`;
 
-    const createdAt = now.toISOString();
+    const createdAt = new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' });
+
     const status = '已接單';
 
     const payload = {
